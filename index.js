@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const express = require("express");
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -73,6 +74,9 @@ app.delete("employee/:employee", (req, res) => {});
 
 // delete assignment
 app.delete("assignment/:assignment", (req, res) => {});
+
+// serve webpages
+app.use(express.static(path.join(__dirname, "dist")));
 
 // server listens for requests at a specified port
 app.listen(PORT, () => {
