@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2020 at 12:44 AM
+-- Generation Time: Jun 02, 2020 at 02:29 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -20,7 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `properties`
 --
-
+DROP DATABASE IF EXISTS properties;
+CREATE DATABASE properties;
+USE properties;
 -- --------------------------------------------------------
 
 --
@@ -29,7 +31,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `assignments` (
   `AssignmentID` int(11) NOT NULL,
-  `DateAssigned` date DEFAULT NULL,
+  `DateAssigned` timestamp NULL DEFAULT NULL,
   `OwnerFirstName` varchar(50) NOT NULL,
   `OwnerLastName` varchar(50) NOT NULL,
   `Address` varchar(255) NOT NULL,
@@ -44,8 +46,16 @@ CREATE TABLE `assignments` (
 --
 
 INSERT INTO `assignments` (`AssignmentID`, `DateAssigned`, `OwnerFirstName`, `OwnerLastName`, `Address`, `Phone`, `ProblemDescription`, `Completed`, `EmployeeID`) VALUES
-(16, NULL, 'Harcourt', 'Bull', '1812 Mountside Drive', '8169126682', 'broken fan', 0, NULL),
+(16, '2020-06-02 00:18:17', 'Harcourt', 'Bull', '1812 Mountside Drive', '8169126682', 'broken fan', 0, 1),
 (17, NULL, 'Jessica', 'Bull', '1812 mountside drive ', '8169126632', 'broken sink', 0, NULL);
+
+--
+-- Triggers `assignments`
+--
+DELIMITER $$
+CREATE TRIGGER `addDate` BEFORE UPDATE ON `assignments` FOR EACH ROW SET NEW.DateAssigned = IF(OLD.employeeID != NEW.employeeID, CURRENT_TIMESTAMP, OLD.DateAssigned)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
