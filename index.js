@@ -18,16 +18,40 @@ connection.connect((err) => {
 });
 
 // get all employees
-app.get("/employee", (req, res) => {});
+app.get("/employee", (req, res) => {
+    const stmt = "SELECT * FROM employees";
+    connection.query(stmt, (err, results) => {
+        if (err) throw err;
+        res.status(200).json(results);
+    });
+});
 
 // get specific employee
-app.get("/employee/:id", (req, res) => {});
+app.get("/employee/:id", (req, res) => {
+    const stmt = "SELECT * FROM employees WHERE EmployeeID = ?";
+    connection.query(stmt, req.params.id, (err, result) => {
+        if (err) throw err;
+        res.status(200).json(result);
+    });
+});
 
 // get all assignments
-app.get("/assignment", (req, res) => {});
+app.get("/assignment", (req, res) => {
+    const stmt = "SELECT * FROM assignments";
+    connection.query(stmt, (err, results) => {
+        if (err) throw err;
+        res.status(200).json(results);
+    });
+});
 
 // get specific assignment
-app.get("/assignment/:id", (req, res) => {});
+app.get("/assignment/:id", (req, res) => {
+    const stmt = "SELECT * FROM assignments WHERE AssignmentID = ?";
+    connection.query(stmt, req.params.id, (err, result) => {
+        if (err) throw err;
+        res.status(200).json(result);
+    });
+});
 
 // create new employee
 app.post("/employee/:employee", (req, res) => {});
