@@ -141,6 +141,10 @@ section {
                 background: darken($blue, 10%);
             }
 
+            .search:focus {
+                outline: none;
+            }
+
             .add {
                 background: $green;
             }
@@ -148,14 +152,39 @@ section {
             .add:hover {
                 background: darken($green, 10%);
             }
+
+            .add:focus {
+                outline: none;
+            }
         }
 
-        .employees {
-            height: 70%;
+        table {
+            margin-top: 1rem;
             width: 100%;
-            background: $white;
-            margin: 1rem 0;
-            overflow-y: scroll;
+            text-align: center;
+            border-spacing: 0px;
+
+            td,
+            th {
+                padding: 0.5rem;
+            }
+
+            th {
+                border-bottom: 1px solid $black;
+            }
+
+            i {
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            .pencil:hover {
+                color: $blue;
+            }
+
+            .trash:hover {
+                color: $red;
+            }
         }
     }
 }
