@@ -49,7 +49,10 @@ class DB {
         xhr.send();
     }
 
-    static getEmployee(name) {}
+    static getEmployee(name) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:5000/employee", true);
+    }
 
     static addEmployee(employee) {}
 

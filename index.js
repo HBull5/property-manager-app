@@ -27,8 +27,17 @@ app.get("/employee", (req, res) => {
     });
 });
 
-// get specific employee
-app.get("/employee/:id", (req, res) => {
+// get employees by last name
+app.get("/employee/employee-name/:name", (req, res) => {
+    const stmt = `SELECT * FROM employees WHERE lastName LIKE ?`;
+    connection.query(stmt, `%${req.params.name}%`, (err, results) => {
+        if (err) throw err;
+        res.status(200).json(results);
+    });
+});
+
+// get employee by id
+app.get("/employee/employee-id/:id", (req, res) => {
     const stmt = "SELECT * FROM employees WHERE EmployeeID = ?";
     connection.query(stmt, req.params.id, (err, result) => {
         if (err) throw err;
