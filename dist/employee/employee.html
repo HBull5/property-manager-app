@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- styles -->
+        <link rel="stylesheet" href="../css/main.min.css" />
+        <!-- javascript -->
+        <script src="scripts/employee.js" defer></script>
+        <!-- font awesome -->
+        <script
+            src="https://kit.fontawesome.com/47ace9daa2.js"
+            crossorigin="anonymous"
+        ></script>
+        <title>Employees</title>
+    </head>
+    <body>
+        <!-- sidebar -->
+        <nav>
+            <i class="fas fa-bars menu-btn"></i>
+            <div class="menu hide-menu">
+                <div>
+                    <i class="fas fa-times close-btn"></i>
+                </div>
+                <ul>
+                    <li><a href="index.html">Employees</a></li>
+                    <li><a href="#">Customers</a></li>
+                    <li><a href="#">Assignments</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- main area -->
+        <section>
+            <div class="container">
+                <input type="text" id="first" placeholder="First Name" />
+                <input type="text" id="last" placeholder="Last Name" />
+                <input type="text" id="address" placeholder="Address" />
+                <input type="text" id="city" placeholder="City" />
+                <input type="text" id="state" placeholder="State" />
+                <input type="text" id="zip" placeholder="Zip" />
+                <input type="text" id="phone" placeholder="Phone" />
+                <div class="btns">
+                    <button class="search">
+                        <i class="fas fa-long-arrow-alt-left"></i> Back
+                    </button>
+                    <button class="add"><i class="fas fa-check"></i> Go</button>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

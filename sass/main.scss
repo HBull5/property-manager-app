@@ -119,6 +119,15 @@ section {
             outline: none;
         }
 
+        .go {
+            width: 100%;
+            color: $white;
+            background: $green;
+            padding: 1rem 0;
+            border: none;
+            cursor: pointer;
+        }
+
         .btns {
             width: 100%;
             display: grid;
