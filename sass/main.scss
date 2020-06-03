@@ -1,0 +1,161 @@
+@import "config";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: $black;
+    background: $grey;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.hide-menu {
+    transform: translateX(-400px);
+}
+
+nav {
+    .menu-btn {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .menu-btn:hover {
+        color: $blue;
+    }
+
+    .menu {
+        height: 100vh;
+        width: 20vw;
+        background: $black;
+        color: $white;
+        position: fixed;
+        display: none;
+        display: grid;
+        grid-template-rows: repeat(3, 1fr);
+        justify-content: center;
+        text-align: center;
+        transition: transform 1s;
+
+        div {
+            i {
+                padding-top: 2rem;
+                font-size: 2.5rem;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            i:hover {
+                color: $red;
+            }
+        }
+
+        ul {
+            align-self: center;
+
+            li {
+                padding: 1rem 0;
+
+                a {
+                    font-size: 1.5rem;
+                    transition: color 0.2s;
+                }
+
+                a:hover {
+                    color: $blue;
+                }
+            }
+        }
+    }
+}
+
+section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .container {
+        height: 80%;
+        width: 50%;
+        padding: 1rem;
+        // border: 1px solid $black;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        h1 {
+            font-size: 2rem;
+            text-decoration: underline;
+            padding-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            margin-bottom: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .btns {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1rem;
+
+            .search,
+            .add {
+                color: $white;
+                border: none;
+                padding: 1rem 0;
+                cursor: pointer;
+            }
+
+            .search {
+                background: $blue;
+            }
+
+            .search:hover {
+                background: darken($blue, 10%);
+            }
+
+            .add {
+                background: $green;
+            }
+
+            .add:hover {
+                background: darken($green, 10%);
+            }
+        }
+
+        .employees {
+            height: 70%;
+            width: 100%;
+            background: $white;
+            margin: 1rem 0;
+            overflow-y: scroll;
+        }
+    }
+}
