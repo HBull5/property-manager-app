@@ -36,7 +36,7 @@ class UI {
 
         this.goBtn.addEventListener("click", () => {
             if (this.update) {
-                DB.updateEmployee(this.getInput());
+                DB.updateEmployee(this.getId(), this.getInput());
                 window.location.href = "index.html";
             } else {
                 DB.addEmployee(this.getInput());
@@ -100,7 +100,13 @@ class DB {
         xhr.send(JSON.stringify(employee));
     }
 
-    static updateEmployee(id) {}
+    static updateEmployee(id, employee) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("PUT", `http://localhost:5000/employee/${id}`, true);
+        xhr.setRequestHeader("Content-type", "application/json");
+
+        xhr.send(JSON.stringify(employee));
+    }
 }
 
 const client = new UI();

@@ -20,9 +20,15 @@ class UI {
             const searchParam = this.userInput.value;
             if (searchParam === "") {
                 DB.getAllEmployees();
+                this.userInput.value = "";
             } else {
                 DB.getEmployeesByName(searchParam);
+                this.userInput.value = "";
             }
+        });
+
+        this.addBtn.addEventListener("click", () => {
+            window.location.href = "employee.html";
         });
 
         DB.getAllEmployees();
@@ -55,7 +61,6 @@ class UI {
         deleteBtns.forEach((deleteBtn) => {
             deleteBtn.addEventListener("click", () => {
                 const id = deleteBtn.getAttribute("data-id");
-                // needs DB static method finished
                 DB.deleteEmployee(id);
             });
         });
@@ -94,7 +99,16 @@ class DB {
     }
 
     static deleteEmployee(id) {
-        console.log(`deleted ${id}`);
+        let xhr = new XMLHttpRequest();
+        xhr.open("DELETE", `http:///localhost:5000/employee/${id}`, true);
+
+        xhr.onload = function () {
+            if (this.status === 200) {
+                window.location.href = "index.html";
+            }
+        };
+
+        xhr.send();
     }
 }
 

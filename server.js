@@ -130,7 +130,17 @@ app.post("/customer/add", (req, res) => {});
 app.post("/assignment/add", (req, res) => {});
 
 // update employee
-app.put("/employee/:id", (req, res) => {});
+app.put("/employee/:id", (req, res) => {
+    const stmt = `UPDATE employees SET 
+        firstName = ?, lastName = ?, address = ?, city = ?, state = ?, zip = ?, phone = ? 
+        WHERE employeeID = ?`;
+    const params = parseEmployeeCustomerObj(req.body);
+    params.push(req.params.id);
+    connection.query(stmt, params, (err, result) => {
+        if (err) throw err;
+        res.status(200).end();
+    });
+});
 
 // update customer
 app.put("/customer/:id", (req, res) => {});
@@ -142,7 +152,13 @@ app.put("/assignment/assign/:id", (req, res) => {});
 app.put("/assignment/update/:id", (req, res) => {});
 
 // delete employee
-app.delete("/employee/:id", (req, res) => {});
+app.delete("/employee/:id", (req, res) => {
+    const stmt = `DELETE FROM employees WHERE employeeID = ?`;
+    connection.query(stmt, req.params.id, (err, result) => {
+        if (err) throw err;
+        res.status(200).end();
+    });
+});
 
 // delete customer
 app.delete("/customer/:id", (req, res) => {});
