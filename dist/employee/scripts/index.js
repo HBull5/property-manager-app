@@ -49,7 +49,7 @@ class UI {
         updateBtns.forEach((updateBtn) => {
             updateBtn.addEventListener("click", () => {
                 const id = updateBtn.getAttribute("data-id");
-                window.location.href = `http://localhost:5000/employee/employee.html?id=${id}`;
+                window.location.href = `employee.html?id=${id}`;
             });
         });
         deleteBtns.forEach((deleteBtn) => {
