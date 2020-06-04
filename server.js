@@ -18,6 +18,39 @@ connection.connect((err) => {
     console.log("DB connection established...");
 });
 
+// body-parser middle-wear
+app.use(express.json());
+
+// parse employee || customer objs
+function parseEmployeeCustomerObj({
+    firstName,
+    lastName,
+    address,
+    city,
+    state,
+    zip,
+    phone,
+}) {
+    return [firstName, lastName, address, city, state, zip, phone];
+}
+
+// parse assignment objs
+/**
+ * This might need some work but I think will work
+ */
+function parseAssignmentObj({
+    employeeID,
+    customerID,
+    problemDescription,
+    completed,
+}) {
+    if (employeeID === "undefined") {
+        return [customerID, problemDescription];
+    } else {
+        return [employeeID, customerID, problemDescription, completed];
+    }
+}
+
 // get all employees
 app.get("/employee", (req, res) => {
     const stmt = "SELECT * FROM employees";
@@ -64,10 +97,25 @@ app.get("/assignment/:id", (req, res) => {
 });
 
 // create new employee
-app.post("/employee/:employee", (req, res) => {});
+app.post("/employee/add", (req, res) => {
+    const stmt = `INSERT INTO employees
+        (firstName, lastName, address, city, state, zip, phone)
+        VALUES(?, ?, ?, ?, ?, ?, ?)`;
+    connection.query(
+        stmt,
+        parseEmployeeCustomerObj(req.body),
+        (err, result) => {
+            if (err) throw err;
+            res.status(200).end();
+        }
+    );
+});
 
 // create new assignment
-app.post("/assignment/:assignment", (req, res) => {});
+app.post("/assignment/add", (req, res) => {
+    console.log(parseAssignmentObj(req.body));
+    res.end();
+});
 
 // update employee
 app.put("/employee/:employee", (req, res) => {});

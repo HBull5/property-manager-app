@@ -12,6 +12,7 @@ class UI {
         this.menu = document.querySelector(".menu");
         this.menuBtn = document.querySelector(".menu-btn");
         this.closeBtn = document.querySelector(".close-btn");
+        this.backBtn = document.querySelector(".search");
         this.goBtn = document.querySelector(".add");
 
         if (this.queryString !== "") {
@@ -27,6 +28,10 @@ class UI {
 
         this.closeBtn.addEventListener("click", () => {
             this.menu.classList.add("hide-menu");
+        });
+
+        this.backBtn.addEventListener("click", () => {
+            window.location.href = "index.html";
         });
 
         this.goBtn.addEventListener("click", () => {
@@ -73,7 +78,17 @@ class DB {
         xhr.send();
     }
 
-    static addEmployee(employee) {}
+    static addEmployee(employee) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5000/employee/add", true);
+
+        xhr.onload = function () {
+            if (this.status === 200) {
+            }
+        };
+
+        xhr.send();
+    }
 
     static updateEmployee(id) {}
 }
