@@ -36,9 +36,11 @@ class UI {
 
         this.goBtn.addEventListener("click", () => {
             if (this.update) {
-                DB.updateEmployee();
+                DB.updateEmployee(this.getInput());
+                window.location.href = "index.html";
             } else {
-                DB.addEmployee();
+                DB.addEmployee(this.getInput());
+                window.location.href = "index.html";
             }
         });
     }
@@ -57,6 +59,18 @@ class UI {
         this.state.value = values.state;
         this.zip.value = values.zip;
         this.phone.value = values.phone;
+    }
+
+    getInput() {
+        return {
+            firstName: this.firstName.value,
+            lastName: this.lastName.value,
+            address: this.address.value,
+            city: this.city.value,
+            state: this.state.value,
+            zip: this.zip.value,
+            phone: this.phone.value,
+        };
     }
 }
 
@@ -81,13 +95,9 @@ class DB {
     static addEmployee(employee) {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:5000/employee/add", true);
+        xhr.setRequestHeader("Content-type", "application/json");
 
-        xhr.onload = function () {
-            if (this.status === 200) {
-            }
-        };
-
-        xhr.send();
+        xhr.send(JSON.stringify(employee));
     }
 
     static updateEmployee(id) {}

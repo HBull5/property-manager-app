@@ -78,6 +78,15 @@ app.get("/employee/employee-id/:id", (req, res) => {
     });
 });
 
+// get all customers
+app.get("/customer", (req, res) => {});
+
+// get customers by last name
+app.get("/customer/customer-name/:name", (req, res) => {});
+
+// get customer by id
+app.get("/customer/customer-id/:id", (req, res) => {});
+
 // get all assignments
 app.get("/assignment", (req, res) => {
     const stmt = "SELECT * FROM assignments";
@@ -87,7 +96,10 @@ app.get("/assignment", (req, res) => {
     });
 });
 
-// get specific assignment
+// get all assignments assigned to an employeeID
+app.get("/assignment/employee-id/:id", (req, res) => {});
+
+// get assignment by id
 app.get("/assignment/:id", (req, res) => {
     const stmt = "SELECT * FROM assignments WHERE AssignmentID = ?";
     connection.query(stmt, req.params.id, (err, result) => {
@@ -111,26 +123,32 @@ app.post("/employee/add", (req, res) => {
     );
 });
 
+// create new customer
+app.post("/customer/add", (req, res) => {});
+
 // create new assignment
-app.post("/assignment/add", (req, res) => {
-    console.log(parseAssignmentObj(req.body));
-    res.end();
-});
+app.post("/assignment/add", (req, res) => {});
 
 // update employee
-app.put("/employee/:employee", (req, res) => {});
+app.put("/employee/:id", (req, res) => {});
+
+// update customer
+app.put("/customer/:id", (req, res) => {});
 
 // assign assignment
-app.put("/assignment/assign/:employee", (req, res) => {});
+app.put("/assignment/assign/:id", (req, res) => {});
 
 // update assignment
-app.put("/assignment/update/:assignment", (req, res) => {});
+app.put("/assignment/update/:id", (req, res) => {});
 
 // delete employee
-app.delete("employee/:employee", (req, res) => {});
+app.delete("/employee/:id", (req, res) => {});
+
+// delete customer
+app.delete("/customer/:id", (req, res) => {});
 
 // delete assignment
-app.delete("assignment/:assignment", (req, res) => {});
+app.delete("/assignment/:assignment", (req, res) => {});
 
 // server listens for requests at a specified port
 app.listen(PORT, () => {
