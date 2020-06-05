@@ -74,6 +74,95 @@ class UI {
     }
 }
 
+class Validation {
+    static isNotEmpty(value) {
+        if (value === "" || value === "undefined" || value === null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    static min(value, min) {
+        if (min <= value.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static max(value, max) {
+        if (value.length <= max) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static minMax(value, min, max) {
+        if (min <= value.length <= max) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static validateFields(employee) {
+        // need to create and return error messages
+        const validated = [];
+        if (
+            this.isNotEmpty(employee.firstName) &&
+            this.max(employee.firstName, 50)
+        ) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (
+            this.isNotEmpty(employee.lastName) &&
+            this.max(employee.lastName, 50)
+        ) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (
+            this.isNotEmpty(employee.address) &&
+            this.max(employee.address, 150)
+        ) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (this.isNotEmpty(employee.city) && this.max(employee.city, 150)) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (this.isNotEmpty(employee.state) && this.max(employee.state, 2)) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (this.isNotEmpty(employee.zip) && this.max(employee.zip, 5)) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+
+        if (this.isNotEmpty(employee.phone) && this.max(employee.phone, 10)) {
+            validated.push(true);
+        } else {
+            validated.push(false);
+        }
+    }
+}
+
 class DB {
     static getEmployeeById(id) {
         let xhr = new XMLHttpRequest();
