@@ -36,11 +36,15 @@ class UI {
 
         this.goBtn.addEventListener("click", () => {
             if (this.update) {
-                DB.updateEmployee(this.getId(), this.getInput());
-                window.location.href = "index.html";
+                if (Validation.validateFields(this.getInput())) {
+                    DB.updateEmployee(this.getId(), this.getInput());
+                    window.location.href = "index.html";
+                }
             } else {
-                DB.addEmployee(this.getInput());
-                window.location.href = "index.html";
+                if (Validation.validateFields(this.getInput())) {
+                    DB.addEmployee(this.getInput());
+                    window.location.href = "index.html";
+                }
             }
         });
     }
@@ -75,11 +79,11 @@ class UI {
 }
 
 class Validation {
-    static isNotEmpty(value) {
+    static isEmpty(value) {
         if (value === "" || value === "undefined" || value === null) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -107,58 +111,100 @@ class Validation {
         }
     }
 
+    static getFieldName(index) {
+        if (index === 0) {
+            return "First Name";
+        } else if (index === 1) {
+            return "Last Name";
+        } else if (index === 2) {
+            return "Address";
+        } else if (index === 3) {
+            return "City";
+        } else if (index === 4) {
+            return "State";
+        } else if (index === 5) {
+            return "Zip";
+        }
+    }
+
     static validateFields(employee) {
-        // need to create and return error messages
-        const validated = [];
-        if (
-            this.isNotEmpty(employee.firstName) &&
-            this.max(employee.firstName, 50)
-        ) {
-            validated.push(true);
-        } else {
-            validated.push(false);
+        const errors = [];
+        const inputs = document.querySelectorAll("input");
+        for (const key in employee) {
+            if (this.isEmpty(employee[key])) {
+                errors.push({ error: true, msg: "cannot be blank" });
+            } else {
+                if (key === "firstName" && this.max(employee[key], 50)) {
+                    errors.push({ error: false });
+                } else if (key === "firstName") {
+                    errors.push({
+                        error: true,
+                        msg: "cannot exceed 50 chars",
+                    });
+                }
+
+                if (key === "lastName" && this.max(employee[key], 50)) {
+                    errors.push({ error: false });
+                } else if (key === "lastName") {
+                    errors.push({ error: true, msg: "cannot exceed 50 chars" });
+                }
+
+                if (key === "address" && this.max(employee[key], 150)) {
+                    errors.push({ error: false });
+                } else if (key === "address") {
+                    errors.push({
+                        error: true,
+                        msg: "cannot exceed 150 chars",
+                    });
+                }
+
+                if (key === "city" && this.max(employee[key], 150)) {
+                    errors.push({ error: false });
+                } else if (key === "city") {
+                    errors.push({
+                        error: true,
+                        msg: "cannot exceed 150 chars",
+                    });
+                }
+
+                if (key === "state" && this.max(employee[key], 2)) {
+                    errors.push({ error: false });
+                } else if (key === "state") {
+                    errors.push({ error: true, msg: "cannot exceed 2 chars" });
+                }
+
+                if (key === "zip" && this.max(employee[key], 5)) {
+                    errors.push({ error: false });
+                } else if (key === "zip") {
+                    errors.push({ error: true, msg: "cannot exceed 5 chars" });
+                }
+
+                if (key === "phone" && this.max(employee[key], 10)) {
+                    errors.push({ error: false });
+                } else if (key === "phone") {
+                    errors.push({ error: true, msg: "cannot exceed 10 chars" });
+                }
+            }
         }
 
-        if (
-            this.isNotEmpty(employee.lastName) &&
-            this.max(employee.lastName, 50)
-        ) {
-            validated.push(true);
-        } else {
-            validated.push(false);
+        let errorMsgs = "";
+        for (let i = 0; i < inputs.length; i++) {
+            if (errors[i].error) {
+                errorMsgs += `${inputs[i].getAttribute("placeholder")} ${
+                    errors[i].msg
+                }\n`;
+                inputs[i].classList.add("error");
+                inputs[i].value = "";
+            } else {
+                inputs[i].classList.remove("error");
+            }
         }
 
-        if (
-            this.isNotEmpty(employee.address) &&
-            this.max(employee.address, 150)
-        ) {
-            validated.push(true);
+        if (errorMsgs === "") {
+            return true;
         } else {
-            validated.push(false);
-        }
-
-        if (this.isNotEmpty(employee.city) && this.max(employee.city, 150)) {
-            validated.push(true);
-        } else {
-            validated.push(false);
-        }
-
-        if (this.isNotEmpty(employee.state) && this.max(employee.state, 2)) {
-            validated.push(true);
-        } else {
-            validated.push(false);
-        }
-
-        if (this.isNotEmpty(employee.zip) && this.max(employee.zip, 5)) {
-            validated.push(true);
-        } else {
-            validated.push(false);
-        }
-
-        if (this.isNotEmpty(employee.phone) && this.max(employee.phone, 10)) {
-            validated.push(true);
-        } else {
-            validated.push(false);
+            alert(errorMsgs);
+            return false;
         }
     }
 }

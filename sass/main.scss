@@ -106,6 +106,10 @@ section {
         justify-content: flex-start;
         align-items: center;
 
+        .error {
+            border: 1.5px solid $red;
+        }
+
         h1 {
             font-size: 2rem;
             text-decoration: underline;
