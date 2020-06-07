@@ -100,7 +100,7 @@ class DB {
 
     static deleteEmployee(id) {
         let xhr = new XMLHttpRequest();
-        xhr.open("DELETE", `http:///localhost:5000/employee/${id}`, true);
+        xhr.open("DELETE", `http://localhost:5000/employee/${id}`, true);
 
         xhr.onload = function () {
             if (this.status === 200) {
