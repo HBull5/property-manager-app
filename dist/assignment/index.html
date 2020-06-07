@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- styles -->
+        <link rel="stylesheet" href="../css/main.min.css" />
+        <!-- javascript -->
+        <script src="scripts/index.js" defer></script>
+        <!-- font awesome -->
+        <script
+            src="https://kit.fontawesome.com/47ace9daa2.js"
+            crossorigin="anonymous"
+        ></script>
+        <title>Customers</title>
+    </head>
+    <body>
+        <!-- sidebar -->
+        <nav>
+            <i class="fas fa-bars menu-btn"></i>
+            <div class="menu hide-menu">
+                <div>
+                    <i class="fas fa-times close-btn"></i>
+                </div>
+                <ul>
+                    <li><a href="../employee/index.html">Employees</a></li>
+                    <li><a href="../customer/index.html">Customers</a></li>
+                    <li class="active"><a href="index.html">Assignments</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- main area -->
+        <section>
+            <div class="container">
+                <h1>Assignments</h1>
+                <input
+                    class="user-input"
+                    type="text"
+                    placeholder="Search Assignments by Employee Last Name"
+                />
+                <div class="btns">
+                    <button class="search">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    <button class="add">
+                        <i class="fas fa-plus"></i> Add New Assignment
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr class="table-heading">
+                            <th><strong>First</strong></th>
+                            <th><strong>Last</strong></th>
+                            <th><strong>Address</strong></th>
+                            <th><strong>City</strong></th>
+                            <th><strong>State</strong></th>
+                            <th><strong>Zip</strong></th>
+                            <th><strong>Phone</strong></th>
+                            <th><strong>Update</strong></th>
+                            <th><strong>Delete</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="assignments"></tbody>
+                </table>
+            </div>
+        </section>
+    </body>
+</html>

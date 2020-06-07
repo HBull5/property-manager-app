@@ -79,13 +79,31 @@ app.get("/employee/employee-id/:id", (req, res) => {
 });
 
 // get all customers
-app.get("/customer", (req, res) => {});
+app.get("/customer", (req, res) => {
+    const stmt = "SELECT * FROM customers";
+    connection.query(stmt, (err, result) => {
+        if (err) throw err;
+        res.status(200).json(result);
+    });
+});
 
 // get customers by last name
-app.get("/customer/customer-name/:name", (req, res) => {});
+app.get("/customer/customer-name/:name", (req, res) => {
+    const stmt = `SELECT * FROM customers WHERE lastName Like ?`;
+    connection.query(stmt, `%${req.params.name}%`, (err, results) => {
+        if (err) throw err;
+        res.status(200).json(results);
+    });
+});
 
 // get customer by id
-app.get("/customer/customer-id/:id", (req, res) => {});
+app.get("/customer/customer-id/:id", (req, res) => {
+    const stmt = "SELECT * FROM emplyees WHERE customerID = ?";
+    connection.query(stmt, req.params.id, (err, result) => {
+        if (err) throw err;
+        res.status(200).json(result);
+    });
+});
 
 // get all assignments
 app.get("/assignment", (req, res) => {
@@ -124,7 +142,19 @@ app.post("/employee/add", (req, res) => {
 });
 
 // create new customer
-app.post("/customer/add", (req, res) => {});
+app.post("/customer/add", (req, res) => {
+    const stmt = `INSERT INTO customers
+        (firstName, lastName, address, city, state, zip, phone)
+        VALUES(?, ?, ?, ?, ?, ?, ?)`;
+    connection.query(
+        stmt,
+        parseEmployeeCustomerObj(req.body),
+        (err, result) => {
+            if (err) throw err;
+            res.status(200).end();
+        }
+    );
+});
 
 // create new assignment
 app.post("/assignment/add", (req, res) => {});
@@ -143,7 +173,17 @@ app.put("/employee/:id", (req, res) => {
 });
 
 // update customer
-app.put("/customer/:id", (req, res) => {});
+app.put("/customer/:id", (req, res) => {
+    const stmt = `UPDATE customers SET 
+        firstName = ?, lastName = ?, address = ?, city = ?, state = ?, zip = ?, phone = ?
+        WHERE employeeID = ?`;
+    const params = parseEmployeeCustomerObj(req.body);
+    params.push(req.params.id);
+    connection.query(stmt, params, (err, result) => {
+        if (err) throw err;
+        res.status(200).end();
+    });
+});
 
 // assign assignment
 app.put("/assignment/assign/:id", (req, res) => {});
@@ -161,7 +201,13 @@ app.delete("/employee/:id", (req, res) => {
 });
 
 // delete customer
-app.delete("/customer/:id", (req, res) => {});
+app.delete("/customer/:id", (req, res) => {
+    const stmt = `DELETE FROM customers WHERE employeeID = ?`;
+    connection.query(stmt, req.params.id, (err, result) => {
+        if (err) throw err;
+        res.status(200).end();
+    });
+});
 
 // delete assignment
 app.delete("/assignment/:assignment", (req, res) => {});
