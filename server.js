@@ -107,7 +107,12 @@ app.get("/customer/customer-id/:id", (req, res) => {
 
 // get all assignments
 app.get("/assignment", (req, res) => {
-	const stmt = "SELECT * FROM assignments";
+	const stmt = `SELECT 
+		CONCAT(employees.firstName, " ", employees.lastName) AS employee,
+		CONCAT(customers.firstName, " ", customers.lastName) AS customer, 
+		dateAssigned, completed, assignmentID FROM assignments 
+		JOIN customers ON assignments.customerID = customers.customerID
+		JOIN employees ON assignments.employeeID = employees.employeeID`;
 	connection.query(stmt, (err, results) => {
 		if (err) throw err;
 		res.status(200).json(results);
@@ -156,7 +161,7 @@ app.post("/customer/add", (req, res) => {
 
 // create new assignment
 /**
- * WORKING RIGHT HERE
+ * NOT FINISHED
  */
 app.post("/assignment/add", (req, res) => {
 	const params = parseJobObject(req.body);
@@ -168,7 +173,7 @@ app.post("/assignment/add", (req, res) => {
 	res.end();
 });
 /**
- * HERE BOIIIII
+ * NOT FINISHED
  */
 
 // update employee
