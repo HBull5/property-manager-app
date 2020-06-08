@@ -22,7 +22,7 @@ connection.connect((err) => {
 app.use(express.json());
 
 // parse employee || customer objs
-function parseEmployeeCustomerObj({
+function parsePersonObject({
 	firstName,
 	lastName,
 	address,
@@ -38,7 +38,7 @@ function parseEmployeeCustomerObj({
 /**
  * This might need some work but I think will work
  */
-function parseAssignmentObj({
+function parseJobObject({
 	employeeID,
 	customerID,
 	problemDescription,
@@ -115,10 +115,16 @@ app.get("/assignment", (req, res) => {
 });
 
 // get all assignments assigned to an employeeID
-app.get("/assignment/employee-id/:id", (req, res) => {});
+app.get("/assignment/employee-id/:id", (req, res) => {
+	const stmt = "SELECT * FROM assignments WHERE employeeID = ?";
+	connection.query(stmt, req.params.id, (err, results) => {
+		if (err) throw err;
+		res.status(200).json(results);
+	});
+});
 
 // get assignment by id
-app.get("/assignment/:id", (req, res) => {
+app.get("/assignment/assignment-id/:id", (req, res) => {
 	const stmt = "SELECT * FROM assignments WHERE AssignmentID = ?";
 	connection.query(stmt, req.params.id, (err, result) => {
 		if (err) throw err;
@@ -131,7 +137,7 @@ app.post("/employee/add", (req, res) => {
 	const stmt = `INSERT INTO employees
         (firstName, lastName, address, city, state, zip, phone)
         VALUES(?, ?, ?, ?, ?, ?, ?)`;
-	connection.query(stmt, parseEmployeeCustomerObj(req.body), (err, result) => {
+	connection.query(stmt, parsePersonObject(req.body), (err, result) => {
 		if (err) throw err;
 		res.status(200).end();
 	});
@@ -142,21 +148,35 @@ app.post("/customer/add", (req, res) => {
 	const stmt = `INSERT INTO customers
         (firstName, lastName, address, city, state, zip, phone)
         VALUES(?, ?, ?, ?, ?, ?, ?)`;
-	connection.query(stmt, parseEmployeeCustomerObj(req.body), (err, result) => {
+	connection.query(stmt, parsePersonObject(req.body), (err, result) => {
 		if (err) throw err;
 		res.status(200).end();
 	});
 });
 
 // create new assignment
-app.post("/assignment/add", (req, res) => {});
+/**
+ * WORKING RIGHT HERE
+ */
+app.post("/assignment/add", (req, res) => {
+	const params = parseJobObject(req.body);
+	if (params.length > 2) {
+		console.log("employee passed");
+	} else {
+		console.log("not passed");
+	}
+	res.end();
+});
+/**
+ * HERE BOIIIII
+ */
 
 // update employee
 app.put("/employee/:id", (req, res) => {
 	const stmt = `UPDATE employees SET 
         firstName = ?, lastName = ?, address = ?, city = ?, state = ?, zip = ?, phone = ? 
         WHERE employeeID = ?`;
-	const params = parseEmployeeCustomerObj(req.body);
+	const params = parsePersonObject(req.body);
 	params.push(req.params.id);
 	connection.query(stmt, params, (err, result) => {
 		if (err) throw err;
@@ -169,7 +189,7 @@ app.put("/customer/:id", (req, res) => {
 	const stmt = `UPDATE customers SET 
         firstName = ?, lastName = ?, address = ?, city = ?, state = ?, zip = ?, phone = ?
         WHERE customerID = ?`;
-	const params = parseEmployeeCustomerObj(req.body);
+	const params = parsePersonObject(req.body);
 	params.push(req.params.id);
 	connection.query(stmt, params, (err, result) => {
 		if (err) throw err;

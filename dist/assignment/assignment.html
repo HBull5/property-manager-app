@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- styles -->
+		<link rel="stylesheet" href="../css/main.min.css" />
+		<!-- javascript -->
+		<script src="scripts/assignment.js" defer></script>
+		<!-- font awesome -->
+		<script
+			src="https://kit.fontawesome.com/47ace9daa2.js"
+			crossorigin="anonymous"
+		></script>
+		<title>Employees</title>
+	</head>
+	<body>
+		<!-- sidebar -->
+		<nav>
+			<i class="fas fa-bars menu-btn"></i>
+			<div class="menu hide-menu">
+				<div>
+					<i class="fas fa-times close-btn"></i>
+				</div>
+				<ul>
+					<li><a href="index.html">Employees</a></li>
+					<li><a href="../customer/index.html">Customers</a></li>
+					<li class="active">
+						<a href="../assignment/index.html">Assignments</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- main area -->
+		<section>
+			<div class="container">
+				<label for="problemDescription">Problem Description</label>
+				<textarea
+					class="mb-1"
+					name="problemDescription"
+					id="problemDescription"
+					cols="30"
+					rows="5"
+				></textarea>
+				<label for="customerID">Customer</label>
+				<select class="mb-1" name="customerID" id="customerID">
+					<!-- dynamically fill out with a query this will take some work -->
+				</select>
+				<label for="employeeID">Employee</label>
+				<select class="mb-1" name="employeeID" id="employeeID">
+					<option value="">None</option>
+				</select>
+				<div class="selection">
+					<div class="input-group">
+						<input
+							type="radio"
+							id="incomplete"
+							name="type"
+							value="incomplete"
+							checked
+						/>
+						<label for="incomplete">Incomplete</label>
+					</div>
+					<div class="input-group">
+						<input type="radio" id="complete" name="type" value="complete" />
+						<label for="complete">Complete</label>
+					</div>
+				</div>
+				<div class="btns">
+					<button class="search">
+						<i class="fas fa-long-arrow-alt-left"></i> Back
+					</button>
+					<button class="add"><i class="fas fa-check"></i> Go</button>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
