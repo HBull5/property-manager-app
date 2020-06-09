@@ -22,9 +22,8 @@ class UI {
 				DB.getAllAssignments();
 				this.userInput.value = "";
 			} else {
-				// does not work
-				const id = DB.getEmployeeByName(searchParam);
-				id.done(DB.getAssignmentById(id.employeeID));
+				// does not work //
+				const id = DB.getEmployeesByName(searchParam);
 				this.userInput.value = "";
 			}
 		});
@@ -85,7 +84,7 @@ class DB {
 		xhr.send();
 	}
 
-	static getEmployeeByName(name) {
+	static getEmployeesByName(name) {
 		let xhr = new XMLHttpRequest();
 		xhr.open(
 			"GET",
@@ -95,17 +94,21 @@ class DB {
 
 		xhr.onload = function () {
 			if (this.status === 200) {
-				return JSON.parse(this.responseText);
+				DB.getAssignmentsById(JSON.parse(this.responseText));
 			}
 		};
 
 		xhr.send();
 	}
 
-	static getCustomerByName(name) {}
+	static getCustomersByName(name) {}
 
-	static getAssignmentById(id) {
-		console.log(id);
+	static getAssignmentsById(...ids) {
+		const finished = [];
+		for (const id of ids) {
+			let xhr = new XMLHttpRequest();
+			xhr.open("GET", `http://localhost:5000/`);
+		}
 	}
 
 	static addAssignment() {}
