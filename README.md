@@ -16,3 +16,4 @@
 ## Sass Styling
 
 -   mobile friendly
+-  some new stuff
