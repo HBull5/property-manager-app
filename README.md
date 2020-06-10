@@ -16,4 +16,5 @@
 ## Sass Styling
 
 -   mobile friendly
--  some new stuff
+-   some new stuff
+-   this is only on the harcourt branch
