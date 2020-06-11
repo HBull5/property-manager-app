@@ -44,7 +44,7 @@ function parseJobObject({
 	problemDescription,
 	completed
 }) {
-	if (employeeID === "undefined") {
+	if (employeeID === "") {
 		return [customerID, problemDescription];
 	} else {
 		return [employeeID, customerID, problemDescription, completed];
@@ -106,13 +106,16 @@ app.get("/customer/customer-id/:id", (req, res) => {
 });
 
 // get all assignments
+/**
+ * need to build a conditional join and a condtional
+ */
 app.get("/assignment", (req, res) => {
 	const stmt = `SELECT 
-		CONCAT(employees.firstName, " ", employees.lastName) AS employee,
+		IF(assignments.employeeID IS NULL, "NONE", CONCAT(employees.firstName, " ", employees.lastName)) AS employee,
 		CONCAT(customers.firstName, " ", customers.lastName) AS customer, 
-		dateAssigned, completed, assignmentID FROM assignments 
+		IF(dateAssigned IS NULL, "NONE", dateAssigned) AS dateAssigned, completed, assignmentID FROM assignments 
 		JOIN customers ON assignments.customerID = customers.customerID
-		JOIN employees ON assignments.employeeID = employees.employeeID`;
+		LEFT JOIN employees ON assignments.employeeID = employees.employeeID`;
 	connection.query(stmt, (err, results) => {
 		if (err) throw err;
 		res.status(200).json(results);
@@ -122,9 +125,9 @@ app.get("/assignment", (req, res) => {
 // get all assignments assigned to an employeeID
 app.get("/assignment/employee-id/:id", (req, res) => {
 	const stmt = `SELECT 
-        CONCAT(employees.firstName, " ", employees.lastName) AS employee,
+	IF(assignments.employeeID IS NULL, "NONE", CONCAT(employees.firstName, " ", employees.lastName)) AS employee,
         CONCAT(customers.firstName, " ", customers.lastName) AS customer, 
-        assignments.dateAssigned, assignments.completed, assignments.assignmentID FROM employees
+        IF(dateAssigned IS NULL, "NONE", dateAssigned) AS dateAssigned, completed, assignmentID FROM employees
         JOIN assignments ON assignments.employeeID = employees.employeeID
         JOIN customers ON assignments.customerID = customers.customerID
         WHERE employees.employeeID = ?`;
@@ -135,25 +138,19 @@ app.get("/assignment/employee-id/:id", (req, res) => {
 });
 
 // get all assignments assigned to a customerID
-/**
- * NOT TESTED
- */
 app.get("/assignment/customer-id/:id", (req, res) => {
 	const stmt = `SELECT 
-        CONCAT(employees.firstName, " ", employees.lastName) AS employee, 
+		IF(assignments.employeeID IS NULL, "NONE", CONCAT(employees.firstName, " ", employees.lastName)) AS employee,
         CONCAT(customers.firstName, " ", customers.lastName) AS customer, 
-        assignments.dateAssigned, assignments.completed, assignments.assignmentID FROM customers
+        IF(dateAssigned IS NULL, "NONE", dateAssigned) AS dateAssigned, completed, assignmentID FROM customers
         JOIN assignments ON assignments.customerID = customers.customerID
-        JOIN employees ON assignments.employeeID = employees.employeeID
+        LEFT JOIN employees ON assignments.employeeID = employees.employeeID
         WHERE customers.customerID = ?`;
 	connection.query(stmt, req.params.id, (err, results) => {
 		if (err) throw err;
 		res.status(200).json(results);
 	});
 });
-/**
- * NOT TESTED
- */
 
 // get assignment by id
 app.get("/assignment/assignment-id/:id", (req, res) => {
@@ -188,19 +185,30 @@ app.post("/customer/add", (req, res) => {
 
 // create new assignment
 /**
- * NOT FINISHED
+ * NOT TESTED
  */
 app.post("/assignment/add", (req, res) => {
 	const params = parseJobObject(req.body);
 	if (params.length > 2) {
-		console.log("employee passed");
+		const stmt = `INSERT INTO assignments 
+			(employeeID, customerID, problemDescription, completed)
+			VALUES(?, ?, ?, ?)`;
+		connection.query(stmt, params, (err, result) => {
+			if (err) throw err;
+			res.status(200).end();
+		});
 	} else {
-		console.log("not passed");
+		const stmt = `INSERT INTO assignments
+			(customerID, problemDescription)
+			VALUES(?, ?)`;
+		connection.query(stmt, params, (err, result) => {
+			if (err) throw err;
+			res.status(200).end();
+		});
 	}
-	res.end();
 });
 /**
- * NOT FINISHED
+ * NOT TESTED
  */
 
 // update employee
@@ -229,9 +237,6 @@ app.put("/customer/:id", (req, res) => {
 	});
 });
 
-// assign assignment
-app.put("/assignment/assign/:id", (req, res) => {});
-
 // update assignment
 app.put("/assignment/update/:id", (req, res) => {});
 
@@ -254,7 +259,13 @@ app.delete("/customer/:id", (req, res) => {
 });
 
 // delete assignment
-app.delete("/assignment/:assignment", (req, res) => {});
+app.delete("/assignment/:id", (req, res) => {
+	const stmt = `DELETE FROM assignments WHERE assignmentID = ?`;
+	connection.query(stmt, req.params.id, (err, result) => {
+		if (err) throw err;
+		res.status(200).end();
+	});
+});
 
 // server listens for requests at a specified port
 app.listen(PORT, () => {

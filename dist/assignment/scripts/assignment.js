@@ -10,6 +10,7 @@ class UI {
 		this.incomplete = document.querySelector("#incomplete");
 		this.complete = document.querySelector("#complete");
 		this.completeSelection = document.querySelector(".selection");
+		this.goBtn = document.querySelector(".add");
 		this.loadStatus = [];
 		this.queryString = window.location.search;
 		this.update = null;
@@ -34,6 +35,16 @@ class UI {
 			}
 		});
 
+		this.goBtn.addEventListener("click", () => {
+			if (this.update) {
+				DB.updateAssignment(this.getInput());
+				window.location.href = "index.html";
+			} else {
+				DB.addAssignment(this.getInput());
+				window.location.href = "index.html";
+			}
+		});
+
 		DB.getAllCustomers();
 		DB.getAllEmployees();
 		if (this.employeeSelect.value === "") {
@@ -44,6 +55,15 @@ class UI {
 	getId() {
 		const urlParams = new URLSearchParams(this.queryString);
 		return urlParams.get("id");
+	}
+
+	getInput() {
+		return {
+			problemDescription: this.problemDescription.value,
+			customerID: this.customerSelect.value,
+			employeeID: this.employeeSelect.value,
+			completed: this.incomplete.checked ? 0 : 1
+		};
 	}
 
 	fillCustomerID(customers) {
@@ -166,6 +186,15 @@ class DB {
 
 		xhr.send();
 	}
+
+	static addAssignment(assignment) {
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://localhost:5000/assignment/add", true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(assignment));
+	}
+
+	static updateAssignment() {}
 }
 
 const client = new UI();

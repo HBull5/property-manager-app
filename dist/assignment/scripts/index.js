@@ -7,6 +7,7 @@ class UI {
 		this.userInput = document.querySelector(".user-input");
 		this.searchBtn = document.querySelector(".search");
 		this.addBtn = document.querySelector(".add");
+		this.employeeBtn = document.querySelector("#employee");
 
 		this.menuBtn.addEventListener("click", () => {
 			this.menu.classList.remove("hide-menu");
@@ -16,16 +17,16 @@ class UI {
 			this.menu.classList.add("hide-menu");
 		});
 
-		/**
-		 * Need to add functionality for if is an employee or customer search
-		 */
 		this.searchBtn.addEventListener("click", () => {
 			const searchParam = this.userInput.value;
 			if (searchParam === "") {
 				DB.getAllAssignments();
 				this.userInput.value = "";
-			} else {
+			} else if (this.employeeBtn.checked) {
 				const id = DB.getEmployeesByName(searchParam);
+				this.userInput.value = "";
+			} else {
+				const id = DB.getCustomersByName(searchParam);
 				this.userInput.value = "";
 			}
 		});
@@ -57,6 +58,7 @@ class UI {
 		this.table.innerHTML = content;
 		const updateBtns = document.querySelectorAll(".pencil");
 		const deleteBtns = document.querySelectorAll(".trash");
+		const eyeBtns = document.querySelectorAll(".eye");
 		updateBtns.forEach((updateBtn) => {
 			updateBtn.addEventListener("click", () => {
 				const id = updateBtn.getAttribute("data-id");
@@ -96,16 +98,30 @@ class DB {
 
 		xhr.onload = function () {
 			if (this.status === 200) {
-				DB.getAssignmentsByIds(JSON.parse(this.responseText));
+				DB.getAssignmentsByEmployeesIds(JSON.parse(this.responseText));
 			}
 		};
 
 		xhr.send();
 	}
 
-	static getCustomersByName(name) {}
+	static getCustomersByName(name) {
+		let xhr = new XMLHttpRequest();
+		xhr.open(
+			"GET",
+			`http://localhost:5000/customer/customer-name/${name}`,
+			true
+		);
+		xhr.send();
 
-	static getAssignmentsByIds(ids) {
+		xhr.onload = function () {
+			if (this.status === 200) {
+				DB.getAssignmentsByCustomersIds(JSON.parse(this.responseText));
+			}
+		};
+	}
+
+	static getAssignmentsByEmployeesIds(ids) {
 		let requests = 0;
 		const responses = [];
 		for (const id of ids) {
@@ -137,18 +153,62 @@ class DB {
 							}
 						}
 					}
-					console.log(assignments);
 					client.updateUI(assignments);
 				}
 			});
 		}
 	}
 
-	static addAssignment() {}
+	static getAssignmentsByCustomersIds(ids) {
+		let requests = 0;
+		const responses = [];
+		for (const id of ids) {
+			requests++;
+			new Promise((resolve, reject) => {
+				let xhr = new XMLHttpRequest();
+				xhr.open(
+					"GET",
+					`http://localhost:5000/assignment/customer-id/${id.customerID}`,
+					true
+				);
+				xhr.send();
 
-	static updateAssignment() {}
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						resolve(JSON.parse(xhr.responseText));
+					} else {
+						reject();
+					}
+				};
+			}).then((res) => {
+				responses.push(res);
+				if (responses.length === requests) {
+					const assignments = [];
+					for (const response of responses) {
+						if (response.length !== 0) {
+							for (const assignment of response) {
+								assignments.push(assignment);
+							}
+						}
+					}
+					client.updateUI(assignments);
+				}
+			});
+		}
+	}
 
-	static deleteAssignment() {}
+	static deleteAssignment(id) {
+		let xhr = new XMLHttpRequest();
+		xhr.open("DELETE", `http://localhost:5000/assignment/${id}`, true);
+
+		xhr.onload = function () {
+			if (xhr.status === 200) {
+				DB.getAllAssignments();
+			}
+		};
+
+		xhr.send();
+	}
 }
 
 const client = new UI();
