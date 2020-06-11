@@ -1,20 +1,18 @@
 # TO-DO
 
-## Create Markup
+## SQL
 
--   Customer Section
-    -   all customers page
-    -   update customer page
-    -   add new customer page
--   Assignments Section
-    -   all assignments page
-    -   assignments assigned to an employee
-    -   assignments belonging to a customer
-    -   update assignment page
-    -   new assignment page
+    - add sql trigger for when a new assignment is created with an employeeID assigned to it to insert a current timestamp to dateAssigned col
 
-## Sass Styling
+## Assignments Page
 
--   mobile friendly
--   some new stuff
--   this is only on the harcourt branch
+    - fix functionality for searching by either customer or employee last name
+    - add in ${type} params between customer/employee calls for less code/reusability
+
+## SASS
+
+    - add mobile styling?
+
+## Testing
+
+    - add some tests?
