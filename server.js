@@ -35,9 +35,6 @@ function parsePersonObject({
 }
 
 // parse assignment objs
-/**
- * This might need some work but I think will work
- */
 function parseJobObject({
 	employeeID,
 	customerID,
@@ -106,9 +103,6 @@ app.get("/customer/customer-id/:id", (req, res) => {
 });
 
 // get all assignments
-/**
- * need to build a conditional join and a condtional
- */
 app.get("/assignment", (req, res) => {
 	const stmt = `SELECT 
 		IF(assignments.employeeID IS NULL, "NONE", CONCAT(employees.firstName, " ", employees.lastName)) AS employee,
@@ -184,9 +178,6 @@ app.post("/customer/add", (req, res) => {
 });
 
 // create new assignment
-/**
- * NOT TESTED
- */
 app.post("/assignment/add", (req, res) => {
 	const params = parseJobObject(req.body);
 	if (params.length > 2) {
@@ -207,9 +198,6 @@ app.post("/assignment/add", (req, res) => {
 		});
 	}
 });
-/**
- * NOT TESTED
- */
 
 // update employee
 app.put("/employee/:id", (req, res) => {
