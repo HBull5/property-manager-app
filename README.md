@@ -6,8 +6,7 @@
 
 ## Assignments Page
 
-    - fix functionality for searching by either customer or employee last name
-    - add in ${type} params between customer/employee calls for less code/reusability
+    - Add problem view button on assignment page
 
 ## SASS
 
