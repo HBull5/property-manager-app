@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2020 at 09:09 PM
+-- Generation Time: Jun 12, 2020 at 05:07 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -44,13 +44,18 @@ CREATE TABLE `assignments` (
 
 INSERT INTO `assignments` (`assignmentID`, `employeeID`, `customerID`, `dateAssigned`, `problemDescription`, `completed`) VALUES
 (19, 8, 1, '2020-06-02 15:56:02', 'WASHER Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio magnam omnis harum quos provident quo cupiditate, vitae facere cumque, in quas excepturi ipsam numquam voluptas neque enim sint eius. Eum ea impedit, accusantium ipsam eos enim? Debitis accusamus quia qui excepturi, sapiente impedit incidunt quos esse ratione sint voluptatum distinctio.', 0),
-(20, 8, 2, '2020-06-02 19:07:25', 'CIELING FAN Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio magnam omnis harum quos provident quo cupiditate, vitae facere cumque, in quas excepturi ipsam numquam voluptas neque enim sint eius. Eum ea impedit, accusantium ipsam eos enim? Debitis accusamus quia qui excepturi, sapiente impedit incidunt quos esse ratione sint voluptatum distinctio.', 0);
+(25, 5, 1, '2020-06-12 02:37:58', 'my test problem is so serious', 1);
 
 --
 -- Triggers `assignments`
 --
 DELIMITER $$
-CREATE TRIGGER `addDate` BEFORE UPDATE ON `assignments` FOR EACH ROW SET NEW.dateAssigned = 
+CREATE TRIGGER `insertDate` BEFORE INSERT ON `assignments` FOR EACH ROW SET NEW.dateAssigned = 
+IF(NEW.employeeID IS NULL, NULL, CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `updateDate` BEFORE UPDATE ON `assignments` FOR EACH ROW SET NEW.dateAssigned = 
 IF(NEW.employeeID != OLD.employeeID OR NEW.employeeID IS NOT NULL AND OLD.employeeID IS NULL, CURRENT_TIMESTAMP, OLD.dateAssigned)
 $$
 DELIMITER ;
@@ -139,7 +144,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `assignments`
 --
 ALTER TABLE `assignments`
-  MODIFY `assignmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `assignmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -151,7 +156,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
